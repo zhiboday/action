@@ -1,0 +1,22 @@
+name: sync gitee
+on:
+  schedule:
+    - cron: '30 0-15/3 * * *'
+  workflow_dispatch:
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:    
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false       
+      - name: git-sync gitee/lxk0301/jd_scripts.git to github with private key
+        uses: wei/git-sync@v3
+        with:
+          source_repo: "git@gitee.com:lxk0301/jd_scripts.git"
+          source_branch: "master"
+          destination_repo: "zhiboday/ac_sc"
+          destination_branch: "master"
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
+          source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
+          destination_ssh_private_key: ${{ secrets.DEST_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
